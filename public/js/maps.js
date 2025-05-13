@@ -1,5 +1,5 @@
 async function fetchData(wilayah, year, month) {
-    const url = "http://floonder-api.kakashispiritnews.my.id/api/public/gis/flood-point?limit=10000";
+    const url = "http://floonder-api.kakashispiritnews.my.id/api/public/gis/flood-point";
     try {
         const response = await fetch(url);
 
@@ -24,12 +24,11 @@ async function fetchData(wilayah, year, month) {
                 latitude: coords[1],
                 desa: feature.properties.desa,
                 kecamatan: feature.properties.kecamatan,
-                risk_level: feature.properties.risk_level
+                risk_level: feature.properties.risk_level,
+                risk_score: feature.properties.risk_score
             };
         });
 
-        console.log("Filtered Results:", filteredResults);
-        console.log("Coordinates:", coordinates);
     } catch (error) {
         console.error(error);
     }
