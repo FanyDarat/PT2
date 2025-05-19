@@ -6,72 +6,23 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Flood Data Map</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background: #f4f6f8;
-            color: #333;
-        }
-        h1 {
-            color: #0077cc;
-        }
-        label {
-            display: block;
-            margin: 8px 0 4px;
-            font-weight: 600;
-        }
-        input, select, button {
-            padding: 8px;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            width: 100%;
-            max-width: 300px;
-            border: 1.5px solid #0077cc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #0077cc;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 700;
-        }
-        button:hover {
-            background-color: #005fa3;
-        }
-        #map {
-            height: 1920px;
-            width: 1080px;
-            max-width: 1080px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
-            margin-top: 20px;
-        }
-        @media (max-width: 400px) {
-            input, select, button {
-                max-width: 100%;
-            }
-            body {
-                margin: 10px;
-            }
-            #map {
-                height: 600px;
-                width: 100%;
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/maps.css') }}">
 </head>
 <body>
 
     <h1>Flood Data Map</h1>
 
     <label for="wilayahInput">Wilayah</label>
-    <input type="text" id="wilayahInput" placeholder="Enter wilayah (e.g. Bandung)" />
+    <select name="wilayahInput" id="wilayahInput">
+        <option value="Bandung">Bandung</option>
+        <option value="Kota Bandung">Kota Bandung</option>
+    </select>
 
     <label for="yearInput">Year</label>
-    <input type="number" id="yearInput" placeholder="Enter year (e.g. 2025)" />
+    <select name="yearInput" id="yearInput">
+        <option value="2025">2025</option>
+        <option value="2026">2026</option>
+    </select>
 
     <label for="monthInput">Month</label>
     <select id="monthInput">
@@ -96,7 +47,5 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="{{ asset('js/maps.js') }}"></script>
-    <script src="{{ asset('js/data.js') }}"></script>
-    
 </body>
 </html>
