@@ -1,0 +1,132 @@
+// addKosan.js
+
+// Function to handle the submission of new Kosan data
+async function submitKosanData(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+// Get values from the form inputs
+    const nama = document.getElementById('namaInput').value.trim();
+    const alamat = document.getElementById('alamatInput').value.trim();
+    const luas = parseFloat(document.getElementById('luasInput').value.trim());
+    const latitude = parseFloat(document.getElementById('latitudeInput').value.trim());
+    const longitude = parseFloat(document.getElementById('longitudeInput').value.trim());
+    const link = document.getElementById('linkInput').value.trim();
+
+// Validate input
+    if (!nama || !alamat || isNaN(luas) || isNaN(latitude) || isNaN(longitude) || !link) {
+        alert('Please fill in all fields correctly.');
+        return;
+    }
+
+// Create a new Kosan object
+    const newKosan = {
+        nama: nama,
+        alamat_lengkap: alamat,
+        luas_bangunan: luas,
+        link_lengkap_properti: link,
+        geometry: {
+            type: "Point",
+            coordinates: [longitude, latitude]
+        }
+    };
+
+// Add the new marker to the map
+    addKosanMarker(newKosan);
+
+// Optionally, send the newKosan data to your API
+// Uncomment the following line to enable posting the data
+// await postKosanData(newKosan);
+    await postKosanData(newKosan);
+// Reset the form
+    document.getElementById('kosanForm').reset();
+}
+
+// Function to add a Kosan marker to the map
+function addKosanMarker(kosan) {
+    const { nama, alamat_lengkap, luas_bangunan, geometry, link_lengkap_properti } = kosan;
+    const latitude = geometry.coordinates[1];
+    const longitude = geometry.coordinates[0];
+
+// Create a marker for the new Kosan
+    const marker = L.marker([latitude, longitude]).addTo(markersLayer);
+    marker.bindPopup(`
+<strong>Nama:</strong> ${nama}<br />
+<strong>Alamat:</strong> ${alamat_lengkap}<br />
+<strong>Luas Bangunan:</strong> ${luas_bangunan} m²<br />
+<strong>Link:</strong> <a href="${link_lengkap_properti}" target="_blank">View Property</a>
+`);
+}
+
+// Function to post new Kosan data to the server
+async function postKosanData(kosan) {
+    const url = "http://floonder-api.kakashispiritnews.my.id/api/public/gis/kosan"; // Update with your API endpoint
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`, // Include the JWT token
+            },
+            body: JSON.stringify(kosan),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Kosan data posted successfully:', data);
+    } catch (error) {
+        console.error('Error posting Kosan data:', error.message);
+    }
+}
+
+async function fetchKosan() {
+    const url = "http://floonder-api.kakashispiritnews.my.id";
+
+    try {
+        const response = await fetch(url + "/api/public/gis/kosan");
+        const data = await response.json();
+
+        // Process the results
+        data.results.forEach(item => {
+            const alamat = item.alamat_lengkap;
+            const latitude = item.geometry.coordinates[1];
+            const longitude = item.geometry.coordinates[0];
+            const link = item.link_lengkap_properti;
+            const luas = item.luas_bangunan;
+            const nama = item.nama;
+
+            // Create a normal marker for Kosan
+            const marker = L.marker([latitude, longitude]).addTo(markersLayer);
+            marker.bindPopup(`
+                <strong>Nama:</strong> ${nama}<br />
+                <strong>Alamat:</strong> ${alamat}<br />
+                <strong>Luas Bangunan:</strong> ${luas} m²<br />
+                <strong>Link:</strong> <a href="${link}" target="_blank">View Property</a>
+            `);
+        });
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Function to handle map click event
+function onMapClick(e) {
+// Get the latitude and longitude from the click event
+    const latitude = e.latlng.lat;
+    const longitude = e.latlng.lng;
+
+// Populate the form fields with the clicked coordinates
+    document.getElementById('latitudeInput').value = latitude;
+    document.getElementById('longitudeInput').value = longitude;
+}
+
+// Event listener for the form submission
+document.getElementById('kosanForm').addEventListener('submit', submitKosanData);
+
+// Add click event listener to the map
+map.on('click', onMapClick);
+
+fetchKosan();
