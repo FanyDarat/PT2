@@ -20,7 +20,6 @@
                 <li><a href="{{ route('kos') }}">Cari Kos</a></li>
                 <li><a href="{{ route('berita') }}">Berita</a></li>
             </ul>
-            <div class="profile">Profile</div>
         </div>
     </nav>
 

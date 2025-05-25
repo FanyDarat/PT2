@@ -1,4 +1,3 @@
-// public/js/login.js
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission
 
@@ -23,10 +22,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
             return response.json();
         })
         .then(data => {
-            // Store the JWT token in local storage or handle it as needed
-            localStorage.setItem('token', data.data.access);
-            // Redirect to another page or show success message
-            window.location.href = '/'; // Change this to your desired route
+          localStorage.setItem('token', data.data.access);
+            window.location.href = '/admin'; // Change this to your desired route
         })
         .catch(error => {
             document.getElementById('error-message').innerText = error.message;

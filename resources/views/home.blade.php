@@ -16,7 +16,6 @@
                 <li><a href="{{ route('kos') }}">Cari Kos</a></li>
                 <li><a href="{{ route('berita') }}">Berita</a></li>
             </ul>
-            <div class="profile">Profile</div>
         </div>
     </nav>
 
@@ -28,7 +27,7 @@
         </div>
         <div class="content-home">
             <img src="{{ asset('images/conf.png') }}" alt="hero">
-        </div>  
+        </div>
     </section>
 
     <section class="bg1-1">
@@ -41,7 +40,7 @@
                 </div>
                 <div class="content-img">
                     <img src="{{ asset('images/map.jpg') }}" alt="Map">
-                </div>  
+                </div>
 
                 <div class="content-img">
                     <img src="{{ asset('images/1.jpg') }}" alt="Kamar Kos">
@@ -66,7 +65,7 @@
                 <div class="content-img2">
                     <img src="{{ asset('images/news.png') }}" alt="berita">
                 </div>
-            </div> 
+            </div>
         </div>
     </section>
 
